@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="PDA ablation results: how predictions, their assessments, and records of past trials affect robot design search.">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>PDA | Ablation results</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="assets/evidence-data.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to results</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="#main"><strong>PDA</strong><span>Ablation results</span></a>
+      <nav aria-label="Ablation sections">
+        <a href="#added">New ablations</a><a href="#actual-inputs">Actual inputs</a><a href="#original">Original study</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="intro wrap" aria-labelledby="page-title">
+      <p class="eyebrow">Probe / Diagnose / Adapt <span>Anonymous supplementary material</span></p>
+      <h1 id="page-title">PDA ablation results</h1>
+      <p class="lede">Do predictions help when measurements are already available?</p>
+      <p class="intro-copy"><strong>The requested ablation:</strong> keep current behavioral measurements and factual trial history, but remove directional predictions and their assessments. NoPred tests this directly. Facts and NoCheck test what later decisions gain from remembering predictions and receiving explicit assessments.</p>
+    </section>
+
+    <section id="added" class="study wrap" aria-labelledby="added-title">
+      <div class="section-heading"><div><p class="eyebrow">01 / Added ablations</p><h2 id="added-title">Keep the measurements. Test the predictions.</h2></div><p class="budget">3 initial bodies + 20 online edits<br><strong>23 morphology evaluations</strong></p></div>
+      <p class="section-copy">All variants retain module-level measurements and factual histories of bodies, edits, returns, and measured changes. They share initialization, controller budgets, retrieval, and selection rules. R denotes the common PDA-R ablation reference.</p>
+      <div class="comparison-toolbar" role="group" aria-label="Prediction comparison">
+        <button type="button" data-comparison="all" aria-pressed="true">All variants</button>
+        <button type="button" data-comparison="RN" aria-pressed="false">R vs NoPred</button>
+        <button type="button" data-comparison="RF" aria-pressed="false">R vs Facts</button>
+        <button type="button" data-comparison="RC" aria-pressed="false">R vs NoCheck</button>
+        <button type="button" data-comparison="FN" aria-pressed="false">Facts vs NoPred</button>
+      </div>
+      <div class="comparison-reading" aria-live="polite" aria-atomic="true">
+        <div><p class="reading-label" id="comparison-label">What the added ablations show</p><h3 id="comparison-title">Make predictions, check them, and remember the results.</h3><p id="comparison-description">R has higher mean returns than NoPred, Facts, and NoCheck on both tasks. These comparisons support using predictions, assessments, and past records together; they do not assign the full gain to prediction alone.</p></div>
+        <dl class="contrast-values"><div><dt id="value-up-label">UpStepper: R vs NoPred</dt><dd id="value-up">+45.6%</dd></div><div><dt id="value-push-label">Pusher: R vs NoPred</dt><dd id="value-push">+9.9%</dd></div><dt class="value-context" id="value-context">Relative endpoint mean gain</dt></dl>
+      </div>
+
+      <figure class="added-figure"><a href="assets/added-ablation.png" target="_blank" rel="noopener" aria-label="Open the added ablation curves at full resolution"><img src="assets/added-ablation.png" width="4320" height="1275" alt="PDA-R, NoPred, Facts, and NoCheck search curves on UpStepper-v0 and Pusher-v0, from 3 to 23 morphology evaluations."></a></figure>
+      <p class="figure-note" id="added-count-note">Six independent searches per task and variant, paired by shared initialization. Curves show mean &plusmn; across-search sample SD. The original and added studies are analyzed separately.</p>
+
+      <div class="subheading"><h3>What is retained, and what is removed?</h3></div>
+      <div class="table-scroll" tabindex="0" aria-label="Added-ablation information matrix">
+        <table class="matrix" id="added-matrix">
+          <thead><tr><th scope="col">Variant</th><th scope="col">Current behavioral<br>measurements</th><th scope="col">Past measured<br>changes</th><th scope="col">Prediction before<br>the current trial</th><th scope="col">Past reasoning<br>&amp; predictions</th><th scope="col">Past assessments<br>&amp; lessons</th></tr></thead>
+          <tbody>
+            <tr data-condition="R"><th scope="row"><i class="swatch r"></i>PDA-R</th><td>Module-level</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+            <tr data-condition="N"><th scope="row"><i class="swatch n"></i>PDA-NoPred</th><td>Module-level</td><td class="yes">Yes</td><td class="no">No</td><td class="no">No</td><td class="no">No</td></tr>
+            <tr data-condition="F"><th scope="row"><i class="swatch f"></i>PDA-Facts</th><td>Module-level</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="no">No</td><td class="no">No</td></tr>
+            <tr data-condition="C"><th scope="row"><i class="swatch c"></i>PDA-NoCheck</th><td>Module-level</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="no">Withheld</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="table-note">Facts makes and checks current predictions, but supplies only factual history to later decisions. NoCheck keeps predictions and outcomes, so the LLM can still infer whether they agree; explicit assessments and lessons are withheld.</p>
+
+      <section id="actual-inputs" class="input-example" aria-labelledby="input-title">
+        <p class="eyebrow">Inside the next decision</p>
+        <h3 id="input-title">What R and Facts actually receive</h3>
+        <p class="section-copy">Two archived Diagnose inputs from UpStepper, each just after its first online edit. The searches started from the same body but proposed different edits; these are excerpts from their own histories, not the same trial shown twice. Wording is shortened for readability.</p>
+        <div class="input-columns">
+          <article class="input-case" id="input-r">
+            <h4><i class="swatch r"></i>PDA-R <span>Facts, reasoning, predictions, and assessments</span></h4>
+            <img src="assets/input-r.png" width="408" height="180" alt="R's archived edit adds two horizontal actuators to the bottom row. Parent on the left; changed cells outlined on the right.">
+            <p class="edit-caption">Add two horizontal actuators along the bottom row.</p>
+            <dl class="input-fields">
+              <div><dt>Task return</dt><dd>1.461 &rarr; 1.434</dd></div>
+              <div><dt>Measured change</dt><dd>Late forward velocity: <strong>+0.0195</strong></dd></div>
+              <div class="prediction-field"><dt>Hypothesis</dt><dd>Bottom-row actuation could improve forward drive at ground contact.</dd></div>
+              <div class="prediction-field"><dt>Prediction</dt><dd>Late forward velocity should increase.</dd></div>
+              <div class="prediction-field"><dt>Assessment</dt><dd><strong>Supported direction; no return gain.</strong></dd></div>
+              <div class="prediction-field"><dt>Lesson</dt><dd>This metric increase alone did not justify the design.</dd></div>
+            </dl>
+          </article>
+          <article class="input-case" id="input-f">
+            <h4><i class="swatch f"></i>PDA-Facts <span>Factual record retained</span></h4>
+            <img src="assets/input-f.png" width="408" height="180" alt="Facts' archived edit replaces two lower outer soft cells with vertical actuators. Parent on the left; changed cells outlined on the right.">
+            <p class="edit-caption">Replace two lower outer soft cells with vertical actuators.</p>
+            <dl class="input-fields">
+              <div><dt>Task return</dt><dd>1.461 &rarr; 1.462</dd></div>
+              <div><dt>Measured change</dt><dd>Boundary clearance: <strong>0.0000</strong></dd></div>
+              <div><dt>Hypothesis</dt><dd class="withheld">Not supplied in history</dd></div>
+              <div><dt>Prediction</dt><dd class="withheld">Not supplied in history</dd></div>
+              <div><dt>Assessment</dt><dd class="withheld">Not supplied in history</dd></div>
+              <div><dt>Lesson</dt><dd class="withheld">Not supplied in history</dd></div>
+            </dl>
+          </article>
+        </div>
+        <p class="body-key"><span><i class="material rigid"></i>Rigid</span><span><i class="material soft"></i>Soft</span><span><i class="material horizontal"></i>Horizontal actuator</span><span><i class="material vertical"></i>Vertical actuator</span><span>Outlined cells: executed edits</span></p>
+        <p class="input-takeaway"><strong>Facts keeps the measurements, not just the score.</strong> R also remembers why an edit was proposed, what it was expected to change, and whether the measurements supported that expectation.</p>
+        <p class="table-note">Both inputs also contain current behavioral measurements and the recorded bodies, edits, and comparison conditions. The history inputs contain 11,880 characters for R and 3,517 for Facts in this example. Both use the same maximum input length, but their actual lengths differ. This comparison tests keeping these additional records together, not their effect at equal text length.</p>
+      </section>
+
+    </section>
+
+    <section id="original" class="study original-study" aria-labelledby="original-title"><div class="wrap">
+      <div class="section-heading"><div><p class="eyebrow">02 / Original study</p><h2 id="original-title">Which evidence supports morphology search?</h2></div><p class="budget">Cumulative information ablations<br><strong>PDA-S / G / L / R</strong></p></div>
+      <p class="section-copy">G adds behavioral measurements and prediction targets to S. L adds module-level measurements and their locations. R adds past measurements, reasoning, predictions, and assessments. The added ablations above test predictions and their use in later decisions while keeping current and historical measurements available.</p>
+      <figure class="original-figure"><a href="assets/original-ablation.png" target="_blank" rel="noopener" aria-label="Open the original ablation figure at full resolution"><img src="assets/original-ablation.png" alt="Original study: PDA-S, PDA-G, PDA-L and PDA-R search curves on UpStepper-v0 and Pusher-v0." width="2402" height="452" loading="lazy"></a></figure>
+      <div class="table-scroll" tabindex="0" aria-label="Original-study information matrix"><table class="matrix"><thead><tr><th scope="col">Variant</th><th scope="col">Behavioral measurements<br>&amp; prediction targets</th><th scope="col">Module locations<br>&amp; local measurements</th><th scope="col">Past measurements,<br>reasoning &amp; assessments</th></tr></thead><tbody>
+        <tr><th scope="row">PDA-S</th><td>Withheld</td><td>No</td><td>No</td></tr><tr><th scope="row">PDA-G</th><td>Pooled / global</td><td>No</td><td>No</td></tr><tr><th scope="row">PDA-L</th><td>Module-level</td><td class="yes">Yes</td><td>No</td></tr><tr><th scope="row">PDA-R</th><td>Module-level</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+      </tbody></table></div>
+      <div class="original-findings">
+        <div><p class="comparison-name">G vs S</p><h3>Measurements and prediction targets help together.</h3><p>G adds both to scores and controller-learning curves. The paired mean gains are positive on both tasks; this comparison does not separate the two additions.</p></div>
+        <div><p class="comparison-name">L vs G</p><h3>Local measurements help on UpStepper; Pusher is less clear.</h3><p>The final-return benefit is not established on both tasks.</p></div>
+        <div><p class="comparison-name">R vs L</p><h3>Keeping more of each past trial helps later decisions.</h3><p>R has positive paired mean gains on both tasks. It adds past measurements, reasoning, predictions, and assessments together; the new ablations examine which records help.</p></div>
+      </div>
+    </div></section>
+
+  </main>
+  <footer class="wrap"><span>PDA / Anonymous supplementary results</span><a href="#main">Back to top</a></footer>
+</body>
+</html>
